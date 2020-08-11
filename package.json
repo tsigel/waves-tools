@@ -1,0 +1,34 @@
+{
+  "name": "waves-tools",
+  "version": "0.0.0",
+  "description": "Monorep for tools for waves blockchain.",
+  "main": "index.js",
+  "repository": "git@github.com:tsigel/waves-tools.git",
+  "author": "tsigel <tsddaniil@gmail.com>",
+  "license": "MIT",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build-fetch": "cd ./packages/fetch && npx tsc"
+  },
+  "jest": {
+    "collectCoverage": true,
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "/test/"
+    ],
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ],
+    "transform": {
+      "^.+\\.(ts|tsx)$": "ts-jest"
+    },
+    "testMatch": [
+      "**/__test__/*spec.+(ts)"
+    ]
+  }
+}
