@@ -1,13 +1,15 @@
 {
-  "name": "@waves-tools/fetch",
+  "name": "@waves-tools/private-request",
   "version": "0.0.1",
   "description": "Request with node-fetch",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "license": "MIT",
   "dependencies": {
-    "@types/node": "^14.0.27",
-    "node-fetch": "^2.6.0"
+    "@types/ramda": "^0.27.14",
+    "@waves-tools/fetch": "^0.0.1",
+    "ramda": "^0.27.1",
+    "tslib": "^2.0.1"
   },
   "files": [
     "dist"
@@ -20,7 +22,7 @@
   },
   "scripts": {
     "prepublish": "yarn test",
-    "postpublish": "git push",
+    "postpublish": "git push origin HEAD",
     "postversion": "yarn publish --access public",
     "test": "jest",
     "build": "npx tsc"
@@ -29,7 +31,7 @@
     "collectCoverage": true,
     "coveragePathIgnorePatterns": [
       "/node_modules/",
-      "/test/"
+      "/__test__/"
     ],
     "moduleFileExtensions": [
       "ts",

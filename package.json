@@ -10,9 +10,6 @@
   "workspaces": [
     "packages/*"
   ],
-  "scripts": {
-    "build-fetch": "cd ./packages/fetch && npx tsc"
-  },
   "jest": {
     "collectCoverage": true,
     "coveragePathIgnorePatterns": [

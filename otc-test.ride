@@ -1,0 +1,104 @@
+{-# STDLIB_VERSION 3 #-}
+{-# CONTENT_TYPE DAPP #-}
+{-# SCRIPT_TYPE ACCOUNT #-}
+
+let USDT = "34N9YcEETLWn93qYQ64EsP1x89tSruJU44RrEMSXXEPJ"
+let USDN = "DG2xFkPdDwKUoBkzGAhQtLpSGzfXLiCYPEzeKH2Ad24p"
+let idUSDN = USDN.fromBase58String()
+let idUSDT = USDT.fromBase58String()
+let withdrawDelay = 1024
+let decimalPartUSDN = 1000000
+let decimalPartUSDT = 1000000
+let minimalAmountToSwapUSDT = 2*decimalPartUSDN
+let minimalAmountToSwapUSDN = 1*decimalPartUSDT
+
+
+func collectKey(address: Address, amountToSwapInKey:Int, allowToWithdrawHeight:Int) = {
+    toString(address)+"_WITHDRAW_"+toString(amountToSwapInKey)+"_HEIGHT_"+ toString(allowToWithdrawHeight)
+}
+
+@Callable(contextObj)
+func swapUSDTtoUSDN() =   {
+        let payment = match(contextObj.payment) {
+            case p:AttachedPayment => p
+            case _ => throw("Payment not attached")
+        }
+        let assetIdReceived = payment.assetId
+        let tokenReceiveAmount = payment.amount
+        let userAddress = contextObj.caller
+        let currentClientBalanceUSDT = match(getInteger(this, toString(userAddress)+"_balance")){
+            case currentBalance: Int =>  value(getInteger(this, toString(userAddress)+"_balance"))
+            case _=> 0
+        }
+
+        if (assetIdReceived != idUSDT  ) then
+        (
+            throw("to swap USDT to USDN you need attach payment in USDT")
+        )
+        else (
+                if (tokenReceiveAmount <  minimalAmountToSwapUSDT  ) then
+                    (
+                        throw("you can swap at least " + toString(minimalAmountToSwapUSDT/decimalPartUSDT) + " tokens")
+                    )
+                else (
+                        ScriptResult(
+                            WriteSet([DataEntry(toString(contextObj.caller)+"_balance", currentClientBalanceUSDT + tokenReceiveAmount )]),
+                            TransferSet([ScriptTransfer(contextObj.caller, tokenReceiveAmount, idUSDN)])
+                        )
+                    )
+        )
+}
+
+@Callable(contextObj)
+func initializationUSDNtoUSDTswap() = {
+    let payment = match(contextObj.payment) {
+        case p:AttachedPayment => p
+        case _ => throw("Payment not attached")
+    }
+    let assetIdReceived = payment.assetId
+    let paymentAmount = payment.amount
+    let userAddress = contextObj.caller
+    let currentClientBalanceUSDT = match(getInteger(this, toString(userAddress)+"_balance")){
+        case currentBalance: Int =>  getIntegerValue(this, toString(userAddress)+"_balance")
+        case _=> 0
+    }
+    if ( assetIdReceived != idUSDN  ) then
+        (
+            throw("to swap USDN to USDT you need attach payment in USDN")
+        )
+    else (
+        if currentClientBalanceUSDT < paymentAmount || paymentAmount < minimalAmountToSwapUSDN then
+            throw("swap amount fail")
+        else
+            let allowToWithDrawHeight = height+withdrawDelay
+            if this.getString(collectKey(contextObj.caller,paymentAmount,allowToWithDrawHeight)).isDefined() then
+                throw("you have already started withdrawal process, wait next block")
+            else
+                ScriptResult(
+                WriteSet([DataEntry(toString(contextObj.caller)+"_balance", currentClientBalanceUSDT - paymentAmount ),
+                        DataEntry(collectKey(contextObj.caller,paymentAmount,allowToWithDrawHeight), "not_withdrawn" )
+                        ]),
+                TransferSet([])
+        )
+    )
+}
+
+
+@Callable(contextObj)
+func swapUSDNtoUSDT(amountToSwapInKey: Int,heightInKey: Int) =   {
+        let key = collectKey(contextObj.caller, amountToSwapInKey,heightInKey)
+        let withdrawnInfo = match(getString(this, key )){
+            case withdrawnInfo: String => getStringValue(this, key)
+            case _=> throw("this key doesn't exists "+ key + " at address  " + toString(this) )
+        }
+        if height >= heightInKey && withdrawnInfo == "not_withdrawn" then
+            ScriptResult(
+                WriteSet([DataEntry(key, "withdrawn" )]),
+                TransferSet([ScriptTransfer(contextObj.caller, amountToSwapInKey, idUSDT)])
+            )
+
+        else throw("withdrawal is possible after "+toString(heightInKey)+" height or you have already withdrawn USDT")
+}
+
+@Verifier(contextObj)
+    func verify () = true
