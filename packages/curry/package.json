@@ -1,6 +1,6 @@
 {
   "name": "@waves-tools/curry",
-  "version": "1.0.5",
+  "version": "1.0.4",
   "description": "Request with node-fetch",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
