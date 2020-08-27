@@ -1,0 +1,26 @@
+{
+  "name": "@waves-tools/interfaces",
+  "version": "0.0.0",
+  "description": "Request with node-fetch",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "license": "MIT",
+  "dependencies": {
+  },
+  "files": [
+    "dist"
+  ],
+  "devDependencies": {
+    "@types/jest": "^26.0.9",
+    "jest": "^26.3.0",
+    "ts-jest": "^26.1.4",
+    "typescript": "^3.9.7"
+  },
+  "scripts": {
+    "prepublish": "yarn test",
+    "postpublish": "git push",
+    "postversion": "yarn publish --access public",
+    "test": "jest",
+    "build": "npx tsc"
+  }
+}
