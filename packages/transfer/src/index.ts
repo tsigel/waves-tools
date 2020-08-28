@@ -1,29 +1,25 @@
-import { fetch, parseResponse } from '@waves-tools/fetch';
-import { TTransaction } from '@waves/waves-transactions/dist/make-tx';
-import { TRANSACTION_TYPE } from '@waves/waves-transactions/dist/transactions';
+import { Transfer } from '../../interfaces/transactions';
+import { curry } from '@waves-tools/curry';
 
+export const transfer = curry((env, data: TransferData, seed: string): Transfer => {
+    return {
+        type: data.type ?? 4,
+        assetId: data.assetId,
+        amount: data.amount,
+        attachment: data.attachment ?? '',
+        feeAssetId: data.feeAssetId ?? null,
+        timestamp: data.timestamp ?? Date.now(),
+        version: data.version ?? 2,
+        senderPublicKey: data.senderPublicKey,
+        fee: data.fee,
+    };
+});
 
-export const broadcast: IBroadcast = (<T extends TTransaction<TransactionTypeUnion>>(node: string, tx?: T) => {
-    const url = new URL('/transactions/broadcast', node);
+export type TransferData =
+    Partial<Transfer>
+    & Pick<Transfer, 'amount' | 'assetId'>;
 
-    const apply = (tx: T): Promise<T> => fetch(url.toString(), {
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        method: 'POST',
-        body: JSON.stringify(tx)
-    })
-        .then(parseResponse)
-        .then((response) => response.content);
+export type Env = {
+    CHAIN_CODE: string;
+};
 
-    return tx ? apply(tx) : apply;
-}) as IBroadcast;
-
-type TransactionTypeUnion = typeof TRANSACTION_TYPE[keyof typeof TRANSACTION_TYPE];
-
-interface IBroadcast {
-    <T extends TTransaction<TransactionTypeUnion>>(node: string, tx: T): Promise<T>;
-    <T extends TTransaction<TransactionTypeUnion>>(node: string): (tx: T) => Promise<T>;
-}
-
-export default broadcast;

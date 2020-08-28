@@ -1,5 +1,5 @@
 {
-  "name": "@waves-tools/interfaces",
+  "name": "@waves-tools/constants",
   "version": "0.0.0",
   "description": "Request with node-fetch",
   "main": "dist/index.js",

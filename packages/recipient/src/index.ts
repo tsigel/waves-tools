@@ -1,22 +1,11 @@
-import { Transfer } from '../../interfaces/transactions';
+import { MAX_ALIAS_LENGTH } from '../../constants';
+import curry from 'ramda/src/curry';
 
-export const transfer = curry((env, data: TransferData, seed: string): Transfer => {
-    return {
-        type: data.type ?? 4,
-        assetId: data.assetId,
-        amount: data.amount,
-        attachment: data.attachment ?? '',
-        feeAssetId: data.feeAssetId ?? null,
-        timestamp: data.timestamp ?? Date.now(),
-        version: data.version ?? 2,
-        senderPublicKey: data.senderPublicKey,
-        fee: data.fee,
-    };
-});
-
-export type TransferData =
-    Partial<Transfer>
-    & Pick<Transfer, 'amount' | 'assetId'>;
+export const recipient = curry((env: Env, recipient: string): string =>
+    recipient.length > MAX_ALIAS_LENGTH
+        ? recipient
+        : `alias:${env.CHAIN_CODE}:${recipient}`
+);
 
 export type Env = {
     CHAIN_CODE: string;

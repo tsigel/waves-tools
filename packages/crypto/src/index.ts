@@ -1,42 +1,43 @@
-export const curry: ICurry = (callback: AnyFunction, n?: number) => {
-    const loop = (...args: Array<any>): any => {
-        if (args.length >= (n ?? callback.length)) {
-            return callback(...args);
-        } else {
-            return (...local: Array<any>) => loop(...[...args, ...local]);
-        }
-    };
+import { libs } from '@waves/waves-transactions';
+import { curry } from '@waves-tools/curry';
 
-    return loop;
-};
 
-export type AnyFunction = (...args: Array<any>) => any;
-export type TypedFunction<ARGS extends Array<any>, RETURN> = (...args: ARGS) => RETURN;
+export const signBytes = curry((privateKey: string, bytes: Uint8Array): string =>
+    libs.crypto.signBytes({ privateKey }, bytes));
 
-export interface ICurred2<A, B, R> {
-    (a: A, b: B): R;
+export const validateSignature = curry((publicKey: string, signature: string, bytes: Uint8Array) =>
+    libs.crypto.verifySignature(publicKey, bytes, signature));
 
-    (a: A): TypedFunction<[B], R>;
-}
+export const messageEncrypt = curry((privateKeyFrom: string, publicKeyTo: string, prefix: string, message: string) =>
+    libs.crypto.base64Encode(
+        libs.crypto.messageEncrypt(
+            libs.crypto.sharedKey(privateKeyFrom, publicKeyTo, prefix),
+            message
+        )
+    ));
 
-export interface ICurred3<A, B, C, R> {
-    (a: A, b: B, c: C): TypedFunction<[A, B, C], R>;
+export const messageDecrypt = curry((privateKeyTo: string, publicKeyFrom: string, prefix: string, message: string) =>
+    libs.crypto.messageDecrypt(
+        libs.crypto.sharedKey(
+            privateKeyTo,
+            publicKeyFrom,
+            prefix
+        ),
+        libs.crypto.base64Decode(message)
+    ));
 
-    (a: A, b: B): TypedFunction<[C], R>;
+export const encryptByPassword = curry((rounds: number, password: string, message: string) =>
+    libs.crypto.encryptSeed(message, password, rounds));
 
-    (a: A): ICurred2<B, C, R>;
-}
+export const decryptByPassword = curry((rounds: number, password: string, message: string) =>
+    libs.crypto.decryptSeed(message, password, rounds));
 
-export interface ICurry {
-    <T, R>(fn: TypedFunction<[T], R>): TypedFunction<[T], R>;
+export const buildKeyPair = (seed: string) => libs.crypto.keyPair(seed);
 
-    <A, B, R>(fn: TypedFunction<[A, B], R>): ICurred2<A, B, R>;
+export const buildAddressBySeed = curry((chainId: string, seed: string) =>
+    libs.crypto.address(seed, chainId));
 
-    <A, B, C, R>(fn: TypedFunction<[A, B, C], R>): ICurred3<A, B, C, R>;
+export const buildAddressByPublicKey = curry((chainId: string, publicKey: string) =>
+    libs.crypto.address({ publicKey }, chainId));
 
-    <T extends Array<any>, R>(fn: TypedFunction<T, R>, n: (0 | 1)): TypedFunction<T, R>;
-    <T extends Array<any>, R>(fn: TypedFunction<T, R>, n: 2): ICurred2<T[keyof T], T[keyof T], R>;
-    <T extends Array<any>, R>(fn: TypedFunction<T, R>, n: 3): ICurred3<T[keyof T], T[keyof T], T[keyof T], R>;
-}
-
-export default curry;
+// TODO Переписать всё!

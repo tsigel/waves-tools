@@ -684,6 +684,14 @@
   dependencies:
     "@types/yargs-parser" "*"
 
+"@waves-tools/fetch@^0.0.1":
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/@waves-tools/fetch/-/fetch-0.0.1.tgz#405cc60a672c8bf3374e90e52c26102876fec832"
+  integrity sha512-B+n15nfCFpzWlhZu5xAPFgKlpTH7DLXBtFnMXMdsuM4bKsvNLnLJKrsrkBEj7pcSr4VFnIVLLhY6sTb0vJvgsQ==
+  dependencies:
+    "@types/node" "^14.0.27"
+    node-fetch "^2.6.0"
+
 "@waves/bignumber@0.0.1":
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/@waves/bignumber/-/bignumber-0.0.1.tgz#b878129008f1076f549aa29f274a499069916ccf"
@@ -692,10 +700,28 @@
     "@types/bignumber.js" "^5.0.0"
     bignumber.js "^8.1.1"
 
+"@waves/bignumber@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@waves/bignumber/-/bignumber-1.0.0.tgz#b7e4ef0afb9d9e41863707b76239d8134f8266a7"
+  integrity sha512-ymIfkXmn4mAlubmiiWzRpSRN1UAUorqT1u5/R3JxGBdCcFGRa5MuQMQrrJMbuxdcYd00OBrPmzdpfyBsjoplZg==
+  dependencies:
+    bignumber.js "^8.1.1"
+
 "@waves/marshall@^0.10.0":
   version "0.10.0"
   resolved "https://registry.yarnpkg.com/@waves/marshall/-/marshall-0.10.0.tgz#ba32ee1a06c58ab1af5e159a4deabdc046ed67a3"
   integrity sha512-I51GmHK7+acy3oqq+NvXrx4ZQNqNmzt9wZvr5dMJ8b9uj4mijqLocojNP03c1/7PR2SIZ56T5sQlHcP1GWWGXw==
+  dependencies:
+    "@types/base64-js" "^1.2.5"
+    "@types/long" "^4.0.0"
+    "@waves/parse-json-bignumber" "^1.0.1"
+    base64-js "^1.3.0"
+    long "^4.0.0"
+
+"@waves/marshall@^0.11.0":
+  version "0.11.0"
+  resolved "https://registry.yarnpkg.com/@waves/marshall/-/marshall-0.11.0.tgz#1b8aa0657b7f13da165051fee78164fca366314a"
+  integrity sha512-zVFp9h8jNqbGmeHt7lzu3CRf+ipCma8pbsD5PmyzLwT8M0XOlkrONL81GaFRRZIUafC6PJ0L9+2ELbRnXysVLg==
   dependencies:
     "@types/base64-js" "^1.2.5"
     "@types/long" "^4.0.0"
@@ -727,7 +753,7 @@
     "@types/long" "^4.0.0"
     protobufjs "^6.8.8"
 
-"@waves/ts-lib-crypto@^1.4.2":
+"@waves/ts-lib-crypto@^1.4.2", "@waves/ts-lib-crypto@^1.4.3":
   version "1.4.3"
   resolved "https://registry.yarnpkg.com/@waves/ts-lib-crypto/-/ts-lib-crypto-1.4.3.tgz#8948fddc35d4e90b2184f9773eeb63907a6a6edd"
   integrity sha512-2pKgyvtLapgM5vpaUEYzX7NYe2bkB+HdWn9W/4d7UFKwyg6zoOYhRQWyb6GuLi3OLHTETgiqpcMZvciFA0Ds6g==
@@ -739,6 +765,15 @@
   version "0.3.2"
   resolved "https://registry.yarnpkg.com/@waves/ts-types/-/ts-types-0.3.2.tgz#6a515a11b285d0ffb06eb65d2f26cf1f1ceca838"
   integrity sha512-HMP8498rjlQ4Yslpzxnd0XFw6JPRmlQjmTFUZjsUMQpqJ5+4+xXF50TjKcDp/poteJLK4hPVx10B0kZoL+8xWQ==
+
+"@waves/waves-transactions@^3.26.0":
+  version "3.26.0"
+  resolved "https://registry.yarnpkg.com/@waves/waves-transactions/-/waves-transactions-3.26.0.tgz#30d7656d532d953b6813ed101e9568bc7f31c987"
+  integrity sha512-lMVgePajmdvST6s6WzXdO92Hl8YN28+KoKtITewDPNUslCztNRPxwpjl3UGJNNZKEIgCe8CaYPWYTFQLsOgIVA==
+  dependencies:
+    "@waves/marshall" "^0.11.0"
+    "@waves/ts-lib-crypto" "^1.4.3"
+    axios "^0.19.0"
 
 "@waves/waves-transactions@^4.0.0-beta.19":
   version "4.0.0-beta.19"
@@ -891,6 +926,13 @@ aws4@^1.8.0:
   version "1.10.0"
   resolved "https://registry.yarnpkg.com/aws4/-/aws4-1.10.0.tgz#a17b3a8ea811060e74d47d306122400ad4497ae2"
   integrity sha512-3YDiu347mtVtjpyV3u5kVqQLP242c06zwDOgpeRnybmXlYYsLbtTrUBUm8i8srONt+FWobl5aibnU1030PeeuA==
+
+axios@^0.19.0:
+  version "0.19.2"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-0.19.2.tgz#3ea36c5d8818d0d5f8a8a97a6d36b86cdc00cb27"
+  integrity sha512-fjgm5MvRHLhx+osE2xoekY70AhARk3a6hkN+3Io1jc00jtquGvxYlKlsFUhmUET0V5te6CcZI7lcv2Ym61mjHA==
+  dependencies:
+    follow-redirects "1.5.10"
 
 babel-jest@^26.3.0:
   version "26.3.0"
@@ -1272,6 +1314,13 @@ data-urls@^2.0.0:
     whatwg-mimetype "^2.3.0"
     whatwg-url "^8.0.0"
 
+debug@=3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/debug/-/debug-3.1.0.tgz#5bb5a0672628b64149566ba16819e61518c67261"
+  integrity sha512-OX8XqP7/1a9cqkxYw2yXss15f26NKWBpDXQd0/uK/KPqdQhxbPa994hnzjcE2VqQpDslf55723cKPUOGSmMY3g==
+  dependencies:
+    ms "2.0.0"
+
 debug@^2.2.0, debug@^2.3.3:
   version "2.6.9"
   resolved "https://registry.yarnpkg.com/debug/-/debug-2.6.9.tgz#5d128515df134ff327e90a4c93f4e077a536341f"
@@ -1582,6 +1631,13 @@ find-up@^4.0.0, find-up@^4.1.0:
   dependencies:
     locate-path "^5.0.0"
     path-exists "^4.0.0"
+
+follow-redirects@1.5.10:
+  version "1.5.10"
+  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.5.10.tgz#7b7a9f9aea2fdff36786a94ff643ed07f4ff5e2a"
+  integrity sha512-0V5l4Cizzvqt5D44aTXbFZz+FtyXV1vrDN6qrelxtfYQKW0KO0W2T/hkE8xvGa/540LkZlkaUjO4ailYTFtHVQ==
+  dependencies:
+    debug "=3.1.0"
 
 for-in@^1.0.2:
   version "1.0.2"

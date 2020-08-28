@@ -1,5 +1,5 @@
 {
-  "name": "@waves-tools/transfer",
+  "name": "@waves-tools/recipient",
   "version": "0.0.0",
   "description": "Request with node-fetch",
   "main": "dist/index.js",
@@ -38,5 +38,9 @@
     "testMatch": [
       "**/__test__/*spec.+(ts)"
     ]
+  },
+  "dependencies": {
+    "@types/ramda": "^0.27.14",
+    "ramda": "^0.27.1"
   }
 }
